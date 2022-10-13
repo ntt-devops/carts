@@ -1,4 +1,6 @@
 name: ci
+env:
+  GROUP: amani78
 
 on:
   push:
@@ -43,7 +45,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASS }}
-        repository: amani78/${{ env.REPO }}
+        repository: ${{ env.GROUP }}/${{ env.REPO }}
         tag_with_ref: true
         tag_with_sha: true
         path: docker/carts
