@@ -9,12 +9,23 @@ import org.springframework.web.bind.annotation.*;
 import works.weave.socks.cart.cart.CartDAO;
 import works.weave.socks.cart.cart.CartResource;
 import works.weave.socks.cart.entities.Cart;
+import io.featurehub.client.ClientContext;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 @RestController
 @RequestMapping(path = "/carts")
 public class CartsController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
+    private final Provider<ClientContext> ctxProvider;
+
+    @Inject
+    public CartsController(Provider<ClientContext> ctxProvider) {
+        this.ctxProvider = ctxProvider;
+    } 
 
     @Autowired
     private CartDAO cartDAO;
@@ -28,7 +39,9 @@ public class CartsController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @RequestMapping(value = "/{customerId}", method = RequestMethod.DELETE)
     public void delete(@PathVariable String customerId) {
-        new CartResource(cartDAO, customerId).destroy().run();
+        ClientContext ctx = ctxProvider.get();
+        boolean toggleDelete= ctx.feature("ToggleDelete").getBoolean();
+       if (toggleDelete) {new CartResource(cartDAO, customerId).destroy().run();};
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)

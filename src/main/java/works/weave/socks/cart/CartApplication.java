@@ -8,6 +8,9 @@ import io.featurehub.client.ClientContext;
 import io.featurehub.client.EdgeFeatureHubConfig;
 import io.featurehub.client.FeatureHubConfig;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
+
 @SpringBootApplication
 @EnablePrometheusEndpoint
 public class CartApplication {
@@ -15,7 +18,7 @@ public class CartApplication {
         SpringApplication.run(CartApplication.class, args);
     }
 
-      @Bean
+  @Bean
   public FeatureHubConfig featureHubConfig() {
     String host = System.getenv("FEATUREHUB_EDGE_URL");
 
